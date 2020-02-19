@@ -1,6 +1,3 @@
-///<reference path="../typings/babylon.d.ts" />
-// import * as BABYLON from "babylon";
-
 export class Game
 {
     private _canvas: HTMLCanvasElement;

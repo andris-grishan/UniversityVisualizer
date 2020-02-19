@@ -4,8 +4,10 @@
         "sourceMap": false,
         "target": "es5",
         "types": [
-            "./typings/babylon"
-        ]
+            "babylonjs",
+            "babylonjs-gui",
+            "babylonjs-materials"
+        ],
     },
     "include": [
         "src/**/*"
