@@ -1,0 +1,51 @@
+Offtop:
+The documentation on the official website: https://doc.babylonjs.com/ does not available in Russian Federation. I should use VPN for this. The Internet speed decreases a little when I use VPN. I do not understand why this is happen. But it is not a problem. I just let you know. Maybe this information will be useful.
+
+Okay. I understand that I cannot use NPM to install BJS for a while. I will go in another way that you descripted. I read on the page: https://doc.babylonjs.com/ this information:
+
+> However, you will need to download the BabylonJS TypeScript definition file from https://preview.babylonjs.com/babylon.d.ts in order to compile your project. Save this  `babylon.d.ts`  file into your project folder and create an empty  `index.html`  like so:
+
+I created the "babylon.d.ts" file and save it in the root folder where my "index.html" was created. It works for me. I will described my steps below because I do not want to forget this.
+
+I try to compile my source files but I see this error:
+> official-example-bjs-ts> tsc
+> error TS2688: Cannot find type definition file for 'babylonjs'.
+
+"import" gives the same result:
+`import * as BABYLON from "babylonjs";`
+
+Game.ts
+
+    ///<reference path="babylon.d.ts" />
+    // import * as BABYLON from "babylonjs";
+
+    export class Game
+    {
+        private _canvas: HTMLCanvasElement;
+        private _engine: BABYLON.Engine;
+
+        public constructor(canvasName: string)
+        {
+            // Create canvas and engine
+            this._canvas = document.getElementById(canvasName) as HTMLCanvasElement;
+            this._engine = new BABYLON.Engine(this._canvas, true);
+        }
+    }
+
+Program.ts
+
+    import { Game } from "./Game";
+
+    class Program
+    {
+        public static Main()
+        {
+            let game = new Game("renderCanvas");
+        }
+    }
+
+    window.onload = () =>
+    {
+        Program.Main();
+    }
+

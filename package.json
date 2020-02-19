@@ -1,0 +1,21 @@
+{
+    "name": "official-example-bjs-ts",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+		"serve": "http-server",
+        "browserify": "browserify dist/Program.js -o dist/bundle.js",
+        "uglifyjs": "uglifyjs dist/bundle.js -o dist/bundle.min.js",
+        "build": "tsc && npm run browserify && npm run uglifyjs"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "browserify": "^16.5.0",
+        "http-server": "^0.12.1",
+        "typescript": "^3.7.5",
+        "uglify-js": "^3.8.0"
+    }
+}
