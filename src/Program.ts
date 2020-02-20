@@ -1,17 +1,17 @@
-import { Game } from "./Game";
+import { MainScene } from "./MainScene";
 
 class Program
 {
     public static Main()
     {
         // Create the game using the 'renderCanvas'.
-        let game = new Game('renderCanvas');
+        let mainScene = new MainScene('renderCanvas');
 
         // Create the scene.
-        game.createScene();
+        mainScene.createScene();
 
         // Start render loop.
-        game.doRender();
+        mainScene.doRender();
     }
 }
 
