@@ -1,19 +1,15 @@
 {
-    "compilerOptions": {
-        "outDir": "dist",
-        "sourceMap": false,
-        "target": "es5",
-        "types": [
-            "babylonjs",
-            "babylonjs-gui",
-            "babylonjs-materials"
-        ],
-    },
-    "include": [
-        "src/**/*"
-    ],
-    "exclude": [
-        "node_modules",
-        "**/*.spec.ts"
-    ]
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "incremental": true,
+    "sourceMap": true,
+    "noEmitOnError": true,
+    "strict": true,
+    "target": "es5",
+    "lib": ["es5", "es6", "dom"],
+    "types": ["babylonjs", "babylonjs-gui", "babylonjs-materials"]
+  },
+  "include": ["src/**/*", "decs.d.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

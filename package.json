@@ -1,24 +1,24 @@
 {
-    "name": "official-example-bjs-ts",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "serve": "npm run build && http-server",
-        "browserify": "browserify dist/Program.js -o dist/bundle.js",
-        "uglifyjs": "uglifyjs dist/bundle.js -o dist/bundle.min.js",
-        "build": "tsc && npm run browserify && npm run uglifyjs"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "babylonjs": "^4.0.3",
-        "babylonjs-gui": "^4.0.3",
-        "babylonjs-materials": "^4.0.3",
-        "browserify": "^16.5.0",
-        "http-server": "^0.12.1",
-        "typescript": "^3.7.5",
-        "uglify-js": "^3.8.0"
-    }
+  "name": "universityvisualizer",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"tsc --watch\" \"watchify dist/Program.js -o dist/bundle.js -v\" \"lite-server\"",
+    "serve": "lite-server"
+  },
+  "dependencies": {
+    "babylonjs": "^4.1.0",
+    "babylonjs-gui": "^4.1.0",
+    "babylonjs-materials": "^4.1.0",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "browserify": "^16.5.1",
+    "concurrently": "^5.1.0",
+    "lite-server": "^2.5.4",
+    "watchify": "^3.11.1"
+  }
 }
