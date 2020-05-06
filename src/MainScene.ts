@@ -41,7 +41,7 @@ export class MainScene {
     skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
     skybox.material = skyboxMaterial;
 
-    BABYLON.SceneLoader.LoadAssetContainer("/models/", "curve_test.babylon", this._scene, function (container) {
+    BABYLON.SceneLoader.LoadAssetContainer("/models/", "parades_test.babylon", this._scene, function (container) {
         console.log(container);
         container.addAllToScene();
     });
