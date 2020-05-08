@@ -24,12 +24,12 @@ export class MainScene {
       this._scene
     );
     this._camera.attachControl(this._canvas, true);
-    this._camera.maxZ = 10000;
+    this._camera.maxZ = 100000;
 
     this._light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), this._scene);
 
     // Skybox
-    let skybox = BABYLON.Mesh.CreateBox("skyBox", 1000, this._scene);
+    let skybox = BABYLON.Mesh.CreateBox("skyBox", 100000, this._scene);
     skybox.infiniteDistance = true;
 
     let skyboxMaterial = new BABYLON.StandardMaterial("skyBox", this._scene);
@@ -41,7 +41,7 @@ export class MainScene {
     skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
     skybox.material = skyboxMaterial;
 
-    BABYLON.SceneLoader.LoadAssetContainer("/models/", "parades_test.babylon", this._scene, function (container) {
+    BABYLON.SceneLoader.LoadAssetContainer("/assets/", "parades.babylon", this._scene, function (container) {
         console.log(container);
         container.addAllToScene();
     });
