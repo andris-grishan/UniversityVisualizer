@@ -27,6 +27,10 @@ export class MainScene {
   createScene(): void {
     this._scene = new BABYLON.Scene(this._engine);
 
+    this._scene.pointerMovePredicate = function (mesh) {
+      return mesh.isPickable && mesh.isVisible && mesh.isReady() && mesh.isEnabled();
+    };
+
     this._camera = new BABYLON.ArcRotateCamera(
       "Camera",
       -Math.PI / 2,
@@ -63,7 +67,12 @@ export class MainScene {
     this.createGUI();
 
     this._scene.onPointerDown = (evt, pickResult) => {
-      if (pickResult.hit && pickResult.pickedMesh && this._onMeshClicked) {
+      if (
+        pickResult.hit &&
+        pickResult.pickedMesh &&
+        this._onMeshClicked &&
+        pickResult.pickedMesh.name.startsWith("parades_")
+      ) {
         this._onMeshClicked({ id: pickResult.pickedMesh.id, name: pickResult.pickedMesh.name });
       }
     };
@@ -71,12 +80,10 @@ export class MainScene {
 
   addHighlights() {
     for (let i = 0; i < this._scene.meshes.length; i++) {
-      this._scene.meshes[i].isPickable = this._scene.meshes[i].name.startsWith("parades_");
-
-      if (this._scene.meshes[i].isPickable) {
+      if (this._scene.meshes[i].isPickable && this._scene.meshes[i].name.startsWith("parades_")) {
         let mesh = this._scene.meshes[i];
         mesh.outlineColor = BABYLON.Color3.Teal();
-        mesh.outlineWidth = 1;
+        mesh.outlineWidth = 2;
         mesh.actionManager = new BABYLON.ActionManager(this._scene);
 
         //ON MOUSE ENTER

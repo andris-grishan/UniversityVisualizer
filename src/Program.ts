@@ -1,7 +1,7 @@
 import { MainScene } from "./MainScene";
 
 class Program {
-  public static meshClicked(meshInfo:{ id: string; name: string }){
+  public static meshClicked(meshInfo: { id: string; name: string }) {
     alert(`mesh clicked! ${meshInfo.name}`);
   }
 
