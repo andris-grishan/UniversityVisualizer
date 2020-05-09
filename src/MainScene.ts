@@ -78,8 +78,35 @@ export class MainScene {
     };
   }
 
+  makeFlatShaded(mesh: BABYLON.Mesh, color: BABYLON.Color3) {
+    let colors = mesh.getVerticesData(BABYLON.VertexBuffer.ColorKind);
+    if (!colors) {
+      colors = [];
+      let positions = mesh.getVerticesData(BABYLON.VertexBuffer.PositionKind);
+      if (positions) {
+        for (let p = 0; p < positions.length / 3; p++) {
+          let tint = Math.random() * 0.05;
+          for (let i = 0; i < 3; i++) {
+            colors.push(color.r + tint, color.g + tint, color.b + tint, 1);
+          }
+        }
+      }
+    }
+
+    mesh.material = null;
+    mesh.setVerticesData(BABYLON.VertexBuffer.ColorKind, colors);
+    mesh.useVertexColors = true;
+  }
+
   addHighlights() {
     for (let i = 0; i < this._scene.meshes.length; i++) {
+      if (this._scene.meshes[i].name == "ground") {
+        let mesh = this._scene.meshes[i] as BABYLON.Mesh;
+        if (mesh) {
+          this.makeFlatShaded(mesh, BABYLON.Color3.FromHexString("#196b2f"));
+        }
+      }
+
       if (this._scene.meshes[i].isPickable && this._scene.meshes[i].name.startsWith("parades_")) {
         let mesh = this._scene.meshes[i];
         mesh.outlineColor = BABYLON.Color3.Teal();
