@@ -1,8 +1,13 @@
+import * as BABYLON from "babylonjs";
 import { MainScene } from "./MainScene";
 
 class Program {
-  public static meshClicked(meshInfo: { id: string; name: string }) {
-    alert(`mesh clicked! ${meshInfo.name}`);
+  public static selectionChanged(meshInfo: { id: string; name: string; position: BABYLON.Vector3 } | null) {
+    if (meshInfo) {
+      alert(`mesh clicked! ${meshInfo.name}`);
+    } else {
+      alert(`selection cleared`);
+    }
   }
 
   public static Main() {
@@ -10,7 +15,7 @@ class Program {
     mainScene.createScene();
     mainScene.doRender();
 
-    mainScene.onMeshClicked = this.meshClicked;
+    mainScene.onSelectionChanged = this.selectionChanged;
   }
 }
 

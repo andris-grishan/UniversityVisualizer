@@ -1,22 +1,27 @@
 import * as BABYLON from "babylonjs";
 import * as BABYLON_GUI from "babylonjs-gui";
+import { FloorManager } from "./FloorManager";
+import { MainGUI } from "./MainGUI";
+import { SelectionManager } from "./SelectionManager";
+import { CameraManager } from "./CameraManager";
 
 export class MainScene {
   private _canvas: HTMLCanvasElement;
   private _engine: BABYLON.Engine;
   private _scene!: BABYLON.Scene;
-  private _camera!: BABYLON.Camera;
+  private _camera!: BABYLON.ArcRotateCamera;
   private _light!: BABYLON.Light;
   private _actionManager!: BABYLON.ActionManager;
 
-  private _minimalFloor = 1;
-  private _maximalFloor = 5;
-  private _currentFloor = 1;
+  private _mainGUI!: MainGUI;
+  private _floorManager!: FloorManager;
+  private _selectionManager!: SelectionManager;
+  private _cameraManager!:CameraManager;
 
-  private _onMeshClicked: ((meshInfo: { id: string; name: string }) => void) | undefined;
-
-  set onMeshClicked(meshClicked: ((meshInfo: { id: string; name: string }) => void) | undefined) {
-    this._onMeshClicked = meshClicked;
+  set onSelectionChanged(
+    selectionChanged: ((meshInfo: { id: string; name: string; position: BABYLON.Vector3 } | null) => void) | undefined
+  ) {
+    this._selectionManager.onSelectionChanged = selectionChanged;
   }
 
   constructor(canvasElement: string) {
@@ -58,24 +63,26 @@ export class MainScene {
     skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
     skybox.material = skyboxMaterial;
 
+    this._selectionManager = new SelectionManager(this._scene);
+    this._mainGUI = new MainGUI(this._scene);
+    this._floorManager = new FloorManager(this._scene);
+    this._cameraManager = new CameraManager(this._scene, this._camera);
+
+    this._mainGUI.createGUI();
+
+    this._floorManager.onCurrentFloorChanged = () => {
+      this._selectionManager.clearSelection();
+    };
+
+    this._mainGUI.onFloorChanged = (floorIndex) => {
+      this._floorManager.showBuildings(floorIndex);
+    };
+
     BABYLON.SceneLoader.LoadAssetContainer("/assets/", "parades.babylon", this._scene, (container) => {
       container.addAllToScene();
       this.addHighlights();
-      this.showBuildings(this._currentFloor);
+      this._floorManager.init();
     });
-
-    this.createGUI();
-
-    this._scene.onPointerDown = (evt, pickResult) => {
-      if (
-        pickResult.hit &&
-        pickResult.pickedMesh &&
-        this._onMeshClicked &&
-        pickResult.pickedMesh.name.startsWith("parades_")
-      ) {
-        this._onMeshClicked({ id: pickResult.pickedMesh.id, name: pickResult.pickedMesh.name });
-      }
-    };
   }
 
   makeFlatShaded(mesh: BABYLON.Mesh, color: BABYLON.Color3) {
@@ -110,7 +117,7 @@ export class MainScene {
       if (this._scene.meshes[i].isPickable && this._scene.meshes[i].name.startsWith("parades_")) {
         let mesh = this._scene.meshes[i];
         mesh.outlineColor = BABYLON.Color3.Teal();
-        mesh.outlineWidth = 2;
+        mesh.outlineWidth = 1;
         mesh.actionManager = new BABYLON.ActionManager(this._scene);
 
         //ON MOUSE ENTER
@@ -128,107 +135,6 @@ export class MainScene {
         );
       }
     }
-  }
-
-  getFloorName(floorIndex: number): string {
-    return `parades_floor_${floorIndex}`;
-  }
-
-  showFloor(floorIndex: number) {
-    let floorName = this.getFloorName(floorIndex);
-    for (let i = 0; i < this._scene.meshes.length; i++) {
-      if (this._scene.meshes[i].parent?.name == floorName) {
-        this._scene.meshes[i].isVisible = true;
-      }
-    }
-  }
-
-  hideFloor(floorIndex: number) {
-    let floorName = this.getFloorName(floorIndex);
-    for (let i = 0; i < this._scene.meshes.length; i++) {
-      if (this._scene.meshes[i].parent?.name == floorName) {
-        this._scene.meshes[i].isVisible = false;
-      }
-    }
-  }
-
-  showBuildings(floorIndex: number) {
-    for (let i = this._minimalFloor; i <= this._maximalFloor; i++) {
-      if (i <= floorIndex) {
-        this.showFloor(i);
-      } else {
-        this.hideFloor(i);
-      }
-    }
-  }
-
-  createGUI() {
-    let advancedTexture = BABYLON_GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-
-    let buttonFloor5 = BABYLON_GUI.Button.CreateSimpleButton("buttonFloor5", "Floor 5");
-    buttonFloor5.width = "80px";
-    buttonFloor5.height = "40px";
-    buttonFloor5.left = "50px";
-    buttonFloor5.top = "150px";
-    buttonFloor5.color = "white";
-    buttonFloor5.background = "green";
-    buttonFloor5.horizontalAlignment = BABYLON_GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    buttonFloor5.onPointerClickObservable.add(() => {
-      this.showBuildings(5);
-    });
-    advancedTexture.addControl(buttonFloor5);
-
-    let buttonFloor4 = BABYLON_GUI.Button.CreateSimpleButton("buttonFloor4", "Floor 4");
-    buttonFloor4.width = "80px";
-    buttonFloor4.height = "40px";
-    buttonFloor4.left = "50px";
-    buttonFloor4.top = "200px";
-    buttonFloor4.color = "white";
-    buttonFloor4.background = "green";
-    buttonFloor4.horizontalAlignment = BABYLON_GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    buttonFloor4.onPointerClickObservable.add(() => {
-      this.showBuildings(4);
-    });
-    advancedTexture.addControl(buttonFloor4);
-
-    let buttonFloor3 = BABYLON_GUI.Button.CreateSimpleButton("buttonFloor3", "Floor 3");
-    buttonFloor3.width = "80px";
-    buttonFloor3.height = "40px";
-    buttonFloor3.left = "50px";
-    buttonFloor3.top = "250px";
-    buttonFloor3.color = "white";
-    buttonFloor3.background = "green";
-    buttonFloor3.horizontalAlignment = BABYLON_GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    buttonFloor3.onPointerClickObservable.add(() => {
-      this.showBuildings(3);
-    });
-    advancedTexture.addControl(buttonFloor3);
-
-    let buttonFloor2 = BABYLON_GUI.Button.CreateSimpleButton("buttonFloor2", "Floor 2");
-    buttonFloor2.width = "80px";
-    buttonFloor2.height = "40px";
-    buttonFloor2.left = "50px";
-    buttonFloor2.top = "300px";
-    buttonFloor2.color = "white";
-    buttonFloor2.background = "green";
-    buttonFloor2.horizontalAlignment = BABYLON_GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    buttonFloor2.onPointerClickObservable.add(() => {
-      this.showBuildings(2);
-    });
-    advancedTexture.addControl(buttonFloor2);
-
-    let buttonFloor1 = BABYLON_GUI.Button.CreateSimpleButton("buttonFloor1", "Floor 1");
-    buttonFloor1.width = "80px";
-    buttonFloor1.height = "40px";
-    buttonFloor1.left = "50px";
-    buttonFloor1.top = "350px";
-    buttonFloor1.color = "white";
-    buttonFloor1.background = "green";
-    buttonFloor1.horizontalAlignment = BABYLON_GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-    buttonFloor1.onPointerClickObservable.add(() => {
-      this.showBuildings(1);
-    });
-    advancedTexture.addControl(buttonFloor1);
   }
 
   doRender(): void {
