@@ -114,7 +114,7 @@ export class MainScene {
         }
       }
 
-      if (this._scene.meshes[i].isPickable && this._scene.meshes[i].name.startsWith("parades_")) {
+      if (this._scene.meshes[i].isPickable && this._scene.meshes[i].name.startsWith("room_")) {
         let mesh = this._scene.meshes[i];
         mesh.outlineColor = BABYLON.Color3.Teal();
         mesh.outlineWidth = 1;

@@ -23,7 +23,7 @@ export class FloorManager {
   }
 
   getFloorName(floorIndex: number): string {
-    return `parades_floor_${floorIndex}`;
+    return `floor_${floorIndex}`;
   }
 
   showFloor(floorIndex: number) {

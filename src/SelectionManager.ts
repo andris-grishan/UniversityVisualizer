@@ -26,7 +26,7 @@ export class SelectionManager {
         pickResult.hit &&
         pickResult.pickedMesh &&
         this._onSelectionChanged &&
-        pickResult.pickedMesh.name.startsWith("parades_")
+        pickResult.pickedMesh.name.startsWith("room_")
       ) {
         this._selectedMesh = pickResult.pickedMesh;
         this._onSelectionChanged({
