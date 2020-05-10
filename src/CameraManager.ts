@@ -9,4 +9,17 @@ export class CameraManager {
     this._scene = scene;
     this._camera = camera;
   }
+
+  setTargetMesh(mesh: BABYLON.AbstractMesh) {
+    BABYLON.Animation.CreateAndStartAnimation(
+      "cameraMove",
+      this._camera,
+      "target",
+      30,
+      20,
+      this._camera.target,
+      mesh.position,
+      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+    );
+  }
 }

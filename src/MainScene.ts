@@ -16,7 +16,7 @@ export class MainScene {
   private _mainGUI!: MainGUI;
   private _floorManager!: FloorManager;
   private _selectionManager!: SelectionManager;
-  private _cameraManager!:CameraManager;
+  private _cameraManager!: CameraManager;
 
   set onSelectionChanged(
     selectionChanged: ((meshInfo: { id: string; name: string; position: BABYLON.Vector3 } | null) => void) | undefined
@@ -39,13 +39,16 @@ export class MainScene {
     this._camera = new BABYLON.ArcRotateCamera(
       "Camera",
       -Math.PI / 2,
-      Math.PI / 3,
-      500,
+      Math.PI / 4,
+      300,
       new BABYLON.Vector3(0, 0, 4.5),
       this._scene
     );
     this._camera.attachControl(this._canvas, true);
     this._camera.maxZ = 100000;
+
+    this._camera.upperBetaLimit = Math.PI / 4;
+    this._camera.lowerBetaLimit = Math.PI / 4;
 
     this._light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), this._scene);
 
@@ -75,14 +78,23 @@ export class MainScene {
     };
 
     this._mainGUI.onFloorChanged = (floorIndex) => {
-      this._floorManager.showBuildings(floorIndex);
+      this.changeFloor(floorIndex);
     };
 
-    BABYLON.SceneLoader.LoadAssetContainer("/assets/", "parades.babylon", this._scene, (container) => {
+    BABYLON.SceneLoader.LoadAssetContainer("/assets/", "parades.babylon", this._scene, (container) => {      
+      this._floorManager.initPositions(container.meshes);
       container.addAllToScene();
       this.addHighlights();
-      this._floorManager.init();
+      this.changeFloor();
     });
+  }
+
+  changeFloor(floorIndex?: number) {
+    this._floorManager.showBuildings(floorIndex);
+    let parentMesh = this._floorManager.getParentMeshByFloor(floorIndex);
+    if (parentMesh) {
+      this._cameraManager.setTargetMesh(parentMesh);
+    }
   }
 
   makeFlatShaded(mesh: BABYLON.Mesh, color: BABYLON.Color3) {
