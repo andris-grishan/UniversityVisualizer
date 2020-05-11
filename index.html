@@ -1,12 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>University visualizer</title>
-    <link rel="stylesheet" href="css/style.css">
-  </head>
-  <body>
-    <canvas id="renderCanvas"></canvas>
-    <script src="dist/bundle.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <title>University visualizer</title>
+  <link rel="stylesheet" href="css/style.css?v=3">
+</head>
+<body>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" id="closeBtn">&times;</a>
+    <div id="test" class="card">
+      <div class="cover">
+        <img id="roomCover">
+        <div class="black">
+          <div class="text_info">
+            <p id="roomTitle">Room Title</p>
+          </div>
+        </div>
+      </div>
+      <div class="text">
+        <div class="desc">
+          <h1>Description:</h1>
+          <p id="roomContent">Room Description</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <canvas id="renderCanvas"></canvas>
+  <script src="dist/bundle.js?v=3"></script>
+</body>
+
 </html>
