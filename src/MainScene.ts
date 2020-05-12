@@ -81,7 +81,7 @@ export class MainScene {
       this.changeFloor(floorIndex);
     };
 
-    BABYLON.SceneLoader.LoadAssetContainer("/assets/", "parades.babylon", this._scene, (container) => {      
+    BABYLON.SceneLoader.LoadAssetContainer("/assets/", "parades.babylon", this._scene, (container) => {
       this._floorManager.initPositions(container.meshes);
       container.addAllToScene();
       this.addHighlights();
@@ -155,12 +155,11 @@ export class MainScene {
     });
 
     window.addEventListener("resize", () => {
-      this._engine.resize();
+      this.doResize();
     });
   }
-  
+
   doResize(): void {
     this._engine.resize();
-    console.log('doResize');
   }
 }

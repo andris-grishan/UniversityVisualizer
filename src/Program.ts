@@ -11,7 +11,8 @@ class Program {
       let roomContent = document.getElementById("roomContent");
       let roomPhotos = document.getElementById("thumbnails");
 
-      axios.get('https://du.baranovskis.dev/api/get/room/' + meshInfo.name)
+      axios
+        .get("https://du.baranovskis.dev/api/get/room/" + meshInfo.name)
         .then(function (response) {
           if (roomTitle != null) {
             roomTitle.innerText = response.data.response.title;
@@ -25,7 +26,7 @@ class Program {
             roomContent.innerHTML = response.data.response.content;
 
             if (roomContent.innerHTML == "") {
-              roomContent.innerHTML =  "NO DATA!";
+              roomContent.innerHTML = "NO DATA!";
             }
           }
 
@@ -42,7 +43,7 @@ class Program {
                 </article>
               `;
             }
-         }
+          }
         })
         .catch(function (error) {
           if (roomTitle != null) {
@@ -58,7 +59,7 @@ class Program {
           }
         });
 
-      console.log('Mesh name: ' + meshInfo.name);
+      console.log("Mesh name: " + meshInfo.name);
       Program.openNav();
     } else {
       Program.closeNav();
@@ -72,11 +73,22 @@ class Program {
 
     this._mainScene.onSelectionChanged = this.selectionChanged;
   }
-  
+
+  public static async doResize() {
+    let i = 1;
+    while (i <= 5) {
+      let timer = setInterval(() => {
+        this._mainScene.doResize();
+        clearInterval(timer);
+      }, 500 * i);
+      i++;
+    }
+  }
+
   public static openNav() {
     let body = document.body as HTMLElement;
     let toggle = document.getElementById("toggle") as HTMLElement;
-    
+
     if (body == null) {
       alert(`body is null!`);
       return;
@@ -90,10 +102,10 @@ class Program {
     if (!body.classList.contains("fullscreen")) {
       return;
     }
-  
+
     toggle.style.display = "block";
     body.classList.remove("fullscreen");
-    this._mainScene.doResize();
+    Program.doResize();
   }
 
   public static closeNav() {
@@ -103,8 +115,8 @@ class Program {
     if (body == null) {
       alert(`body is null!`);
       return;
-    } 
-    
+    }
+
     if (toggle == null) {
       alert(`toggle is null!`);
       return;
@@ -113,12 +125,11 @@ class Program {
     if (body.classList.contains("fullscreen")) {
       return;
     }
-  
+
     toggle.style.display = "none";
     body.classList.add("fullscreen");
-    this._mainScene.doResize();
-  } 
-
+    Program.doResize();
+  }
 }
 
 window.onload = () => {
@@ -128,6 +139,6 @@ window.onload = () => {
   let close = document.getElementById("toggle");
 
   if (close != null) {
-    close.addEventListener("click", (e:Event) => Program.closeNav());
+    close.addEventListener("click", (e: Event) => Program.closeNav());
   }
 };
