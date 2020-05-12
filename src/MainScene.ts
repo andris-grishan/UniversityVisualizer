@@ -158,4 +158,9 @@ export class MainScene {
       this._engine.resize();
     });
   }
+  
+  doResize(): void {
+    this._engine.resize();
+    console.log('doResize');
+  }
 }

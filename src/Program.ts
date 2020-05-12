@@ -3,80 +3,131 @@ import axios from "axios";
 import { MainScene } from "./MainScene";
 
 class Program {
+  private static _mainScene: MainScene;
+
   public static selectionChanged(meshInfo: { id: string; name: string; position: BABYLON.Vector3 } | null) {
     if (meshInfo) {
-      // handle close button click
       let roomTitle = document.getElementById("roomTitle");
       let roomContent = document.getElementById("roomContent");
-      let roomCover = document.getElementById("roomCover") as HTMLImageElement;
+      let roomPhotos = document.getElementById("thumbnails");
 
-      axios.get('https://du.baranovskis.dev/api/get/cabinet/' + meshInfo.name)
+      axios.get('https://du.baranovskis.dev/api/get/room/' + meshInfo.name)
         .then(function (response) {
           if (roomTitle != null) {
-            roomTitle.innerText = response.data.list.title;
+            roomTitle.innerText = response.data.response.title;
+
+            if (roomTitle.innerText == "") {
+              roomTitle.innerText = meshInfo.name;
+            }
           }
 
           if (roomContent != null) {
-            roomContent.innerText = response.data.list.content;
+            roomContent.innerHTML = response.data.response.content;
+
+            if (roomContent.innerHTML == "") {
+              roomContent.innerHTML =  "NO DATA!";
+            }
           }
 
-          if (roomCover != null) {
-            roomCover.src = response.data.list.images[0];
-          }
+          if (roomPhotos != null) {
+            roomPhotos.innerHTML = "";
 
-          openNav();
+            for (var i = 0; i < response.data.response.images.length; i++) {
+              let url = response.data.response.images[i];
+              //onsole.log(url);
+
+              roomPhotos.innerHTML += `
+                <article>
+                  <a class="thumbnail" href="#"><img src="${url}" alt="" /></a>
+                </article>
+              `;
+            }
+         }
         })
         .catch(function (error) {
-          // handle error
-          console.log(error);
+          if (roomTitle != null) {
+            roomTitle.innerText = "Error";
+          }
+
+          if (roomContent != null) {
+            roomContent.innerText = error;
+          }
+
+          if (roomPhotos != null) {
+            roomPhotos.innerHTML = "";
+          }
         });
 
       console.log('Mesh name: ' + meshInfo.name);
-      openNav();
+      Program.openNav();
     } else {
-      closeNav();
-      //alert(`selection cleared`);
+      Program.closeNav();
     }
   }
 
   public static Main() {
-    let mainScene = new MainScene("renderCanvas");
-    mainScene.createScene();
-    mainScene.doRender();
+    this._mainScene = new MainScene("renderCanvas");
+    this._mainScene.createScene();
+    this._mainScene.doRender();
 
-    mainScene.onSelectionChanged = this.selectionChanged;
+    this._mainScene.onSelectionChanged = this.selectionChanged;
   }
+  
+  public static openNav() {
+    let body = document.body as HTMLElement;
+    let toggle = document.getElementById("toggle") as HTMLElement;
+    
+    if (body == null) {
+      alert(`body is null!`);
+      return;
+    }
+
+    if (toggle == null) {
+      alert(`toggle is null!`);
+      return;
+    }
+
+    if (!body.classList.contains("fullscreen")) {
+      return;
+    }
+  
+    toggle.style.display = "block";
+    body.classList.remove("fullscreen");
+    this._mainScene.doResize();
+  }
+
+  public static closeNav() {
+    let body = document.body as HTMLElement;
+    let toggle = document.getElementById("toggle") as HTMLElement;
+
+    if (body == null) {
+      alert(`body is null!`);
+      return;
+    } 
+    
+    if (toggle == null) {
+      alert(`toggle is null!`);
+      return;
+    }
+
+    if (body.classList.contains("fullscreen")) {
+      return;
+    }
+  
+    toggle.style.display = "none";
+    body.classList.add("fullscreen");
+    this._mainScene.doResize();
+  } 
+
 }
-
-function openNav() {
-  let nav = document.getElementById("mySidenav");
-
-  if (nav == null) {
-    alert(`nav is null!`);
-    return;
-  }
- 
-  nav.style.display = "block";
-}
-
-function closeNav() {
-  let nav = document.getElementById('mySidenav');
-
-  if (nav == null) {
-    alert(`nav is null!`);
-    return;
-  }
-
-  nav.style.display = "none";
-} 
 
 window.onload = () => {
   Program.Main();
 
   // handle close button click
-  let close = document.getElementById("closeBtn");
+  let close = document.getElementById("toggle");
 
   if (close != null) {
-    close.addEventListener("click", (e:Event) => closeNav());
+    close.addEventListener("click", (e:Event) => Program.closeNav());
   }
 };

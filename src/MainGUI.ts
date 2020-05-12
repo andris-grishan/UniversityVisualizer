@@ -15,15 +15,66 @@ export class MainGUI {
     this._scene = scene;
     this._advancedTexture = BABYLON_GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
   }
-
   createGUI() {
+    let floor1 = document.getElementById("floor1");
+
+    if (floor1 != null) {
+      floor1.addEventListener("click", (e:Event) => {
+        if (this._onFloorChanged) {
+          this._onFloorChanged(1);
+        }
+      });
+    }
+
+    let floor2 = document.getElementById("floor2");
+
+    if (floor2 != null) {
+      floor2.addEventListener("click", (e:Event) => {
+        if (this._onFloorChanged) {
+          this._onFloorChanged(2);
+        }
+      });
+    }
+
+    let floor3 = document.getElementById("floor3");
+
+    if (floor3 != null) {
+      floor3.addEventListener("click", (e:Event) => {
+        if (this._onFloorChanged) {
+          this._onFloorChanged(3);
+        }
+      });
+    }
+
+    let floor4 = document.getElementById("floor4");
+
+    if (floor4 != null) {
+      floor4.addEventListener("click", (e:Event) => {
+        if (this._onFloorChanged) {
+          this._onFloorChanged(4);
+        }
+      });
+    }
+
+    let floor5 = document.getElementById("floor5");
+
+    if (floor5 != null) {
+      floor5.addEventListener("click", (e:Event) => {
+        if (this._onFloorChanged) {
+          this._onFloorChanged(5);
+        }
+      });
+    }
+  }
+
+  /*createGUI() {
     let buttonFloor5 = BABYLON_GUI.Button.CreateSimpleButton("buttonFloor5", "Floor 5");
     buttonFloor5.width = "80px";
     buttonFloor5.height = "40px";
     buttonFloor5.left = "50px";
     buttonFloor5.top = "150px";
     buttonFloor5.color = "white";
-    buttonFloor5.background = "green";
+    //buttonFloor5.background = "green";
     buttonFloor5.horizontalAlignment = BABYLON_GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     buttonFloor5.onPointerClickObservable.add(() => {
       if (this._onFloorChanged) {
@@ -37,7 +88,7 @@ export class MainGUI {
     buttonFloor4.left = "50px";
     buttonFloor4.top = "200px";
     buttonFloor4.color = "white";
-    buttonFloor4.background = "green";
+    //buttonFloor4.background = "green";
     buttonFloor4.horizontalAlignment = BABYLON_GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     buttonFloor4.onPointerClickObservable.add(() => {
       if (this._onFloorChanged) {
@@ -51,7 +102,7 @@ export class MainGUI {
     buttonFloor3.left = "50px";
     buttonFloor3.top = "250px";
     buttonFloor3.color = "white";
-    buttonFloor3.background = "green";
+    //buttonFloor3.background = "green";
     buttonFloor3.horizontalAlignment = BABYLON_GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     buttonFloor3.onPointerClickObservable.add(() => {
       if (this._onFloorChanged) {
@@ -65,7 +116,7 @@ export class MainGUI {
     buttonFloor2.left = "50px";
     buttonFloor2.top = "300px";
     buttonFloor2.color = "white";
-    buttonFloor2.background = "green";
+    //buttonFloor2.background = "green";
     buttonFloor2.horizontalAlignment = BABYLON_GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     buttonFloor2.onPointerClickObservable.add(() => {
       if (this._onFloorChanged) {
@@ -79,7 +130,7 @@ export class MainGUI {
     buttonFloor1.left = "50px";
     buttonFloor1.top = "350px";
     buttonFloor1.color = "white";
-    buttonFloor1.background = "green";
+    //buttonFloor1.background = "green";
     buttonFloor1.horizontalAlignment = BABYLON_GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     buttonFloor1.onPointerClickObservable.add(() => {
       if (this._onFloorChanged) {
@@ -92,5 +143,5 @@ export class MainGUI {
     this._advancedTexture.addControl(buttonFloor3);
     this._advancedTexture.addControl(buttonFloor2);
     this._advancedTexture.addControl(buttonFloor1);
-  }
+  }*/
 }
