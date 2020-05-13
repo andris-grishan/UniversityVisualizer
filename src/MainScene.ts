@@ -11,7 +11,7 @@ export class MainScene {
   private _scene!: BABYLON.Scene;
   private _camera!: BABYLON.ArcRotateCamera;
   private _light!: BABYLON.Light;
-  private _actionManager!: BABYLON.ActionManager;
+  private _highlightLayer!: BABYLON.HighlightLayer;
 
   private _mainGUI!: MainGUI;
   private _floorManager!: FloorManager;
@@ -26,7 +26,7 @@ export class MainScene {
 
   constructor(canvasElement: string) {
     this._canvas = document.getElementById(canvasElement) as HTMLCanvasElement;
-    this._engine = new BABYLON.Engine(this._canvas, true);
+    this._engine = new BABYLON.Engine(this._canvas, true, { stencil: true });
   }
 
   createScene(): void {
@@ -52,11 +52,15 @@ export class MainScene {
 
     this._light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), this._scene);
 
+    this._highlightLayer = new BABYLON.HighlightLayer("hl1", this._scene);
+    // this._highlightLayer.outerGlow = false;
+    // this._highlightLayer.blurHorizontalSize = 2;
+    // this._highlightLayer.blurVerticalSize = 2;
+
     // Skybox
     let skybox = BABYLON.Mesh.CreateBox("skyBox", 100000, this._scene);
     skybox.infiniteDistance = true;
     skybox.isPickable = false;
-
     let skyboxMaterial = new BABYLON.StandardMaterial("skyBox", this._scene);
     skyboxMaterial.backFaceCulling = false;
     skyboxMaterial.disableLighting = true;
@@ -66,7 +70,7 @@ export class MainScene {
     skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
     skybox.material = skyboxMaterial;
 
-    this._selectionManager = new SelectionManager(this._scene);
+    this._selectionManager = new SelectionManager(this._scene, this._highlightLayer);
     this._mainGUI = new MainGUI(this._scene);
     this._floorManager = new FloorManager(this._scene);
     this._cameraManager = new CameraManager(this._scene, this._camera);
@@ -97,6 +101,41 @@ export class MainScene {
     }
   }
 
+  clearSelection(){
+    this._selectionManager.clearSelection();
+  }
+
+  addHighlights() {
+    for (let i = 0; i < this._scene.meshes.length; i++) {
+      let mesh = this._scene.meshes[i] as BABYLON.Mesh;
+      if (mesh) {
+        if (mesh.name == "ground") {
+          this.makeFlatShaded(mesh, BABYLON.Color3.FromHexString("#196b2f"));
+        }
+
+        if (mesh.isPickable && mesh.name.startsWith("room_")) {
+          mesh.actionManager = new BABYLON.ActionManager(this._scene);
+
+          //ON MOUSE ENTER
+          mesh.actionManager.registerAction(
+            new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, (ev) => {
+              this._highlightLayer.addMesh(mesh, BABYLON.Color3.FromHexString("#00d3b7"));
+            })
+          );
+
+          //ON MOUSE EXIT
+          mesh.actionManager.registerAction(
+            new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, (ev) => {
+              if (!this._selectionManager.selectedMesh || this._selectionManager.selectedMesh != mesh) {
+                this._highlightLayer.removeMesh(mesh);
+              }
+            })
+          );
+        }
+      }
+    }
+  }
+
   makeFlatShaded(mesh: BABYLON.Mesh, color: BABYLON.Color3) {
     let colors = mesh.getVerticesData(BABYLON.VertexBuffer.ColorKind);
     if (!colors) {
@@ -115,38 +154,6 @@ export class MainScene {
     mesh.material = null;
     mesh.setVerticesData(BABYLON.VertexBuffer.ColorKind, colors);
     mesh.useVertexColors = true;
-  }
-
-  addHighlights() {
-    for (let i = 0; i < this._scene.meshes.length; i++) {
-      if (this._scene.meshes[i].name == "ground") {
-        let mesh = this._scene.meshes[i] as BABYLON.Mesh;
-        if (mesh) {
-          this.makeFlatShaded(mesh, BABYLON.Color3.FromHexString("#196b2f"));
-        }
-      }
-
-      if (this._scene.meshes[i].isPickable && this._scene.meshes[i].name.startsWith("room_")) {
-        let mesh = this._scene.meshes[i];
-        mesh.outlineColor = BABYLON.Color3.Teal();
-        mesh.outlineWidth = 1;
-        mesh.actionManager = new BABYLON.ActionManager(this._scene);
-
-        //ON MOUSE ENTER
-        mesh.actionManager.registerAction(
-          new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOverTrigger, function (ev) {
-            mesh.renderOutline = true;
-          })
-        );
-
-        //ON MOUSE EXIT
-        mesh.actionManager.registerAction(
-          new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPointerOutTrigger, function (ev) {
-            mesh.renderOutline = false;
-          })
-        );
-      }
-    }
   }
 
   doRender(): void {

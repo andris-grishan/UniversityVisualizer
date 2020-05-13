@@ -8,7 +8,7 @@ class Program {
   public static selectionChanged(meshInfo: { id: string; name: string; position: BABYLON.Vector3 } | null) {
     if (meshInfo) {
       console.log("Mesh info", meshInfo);
-      
+
       let roomTitle = document.getElementById("roomTitle");
       let roomContent = document.getElementById("roomContent");
       let roomPhotos = document.getElementById("thumbnails");
@@ -115,6 +115,8 @@ class Program {
 
     toggle.style.display = "none";
     body.classList.add("fullscreen");
+
+    this._mainScene.clearSelection();
   }
 }
 
