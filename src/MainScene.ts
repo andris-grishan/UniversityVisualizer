@@ -155,11 +155,7 @@ export class MainScene {
     });
 
     window.addEventListener("resize", () => {
-      this.doResize();
+      this._engine.resize();
     });
-  }
-
-  doResize(): void {
-    this._engine.resize();
   }
 }

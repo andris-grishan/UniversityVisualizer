@@ -23,11 +23,11 @@ export class SelectionManager {
     this._scene = scene;
     this._selectedMesh = null;
 
-    this._scene.onPointerMove = (evt, pickResult) => {
+    this._scene.onPointerMove = () => {
       this._pointerMoving = this._pointerDown;
     };
 
-    this._scene.onPointerDown = (evt, pickResult) => {
+    this._scene.onPointerDown = () => {
       this._pointerDown = true;
     };
 
@@ -41,9 +41,15 @@ export class SelectionManager {
         pickResult.pickedMesh.name.startsWith("room_")
       ) {
         this._selectedMesh = pickResult.pickedMesh;
+
+        let meshName = pickResult.pickedMesh.name;
+        if (meshName.indexOf('.') >= 0){
+          meshName = meshName.substr(0, meshName.indexOf('.')); 
+        }
+
         this._onSelectionChanged({
           id: pickResult.pickedMesh.id,
-          name: pickResult.pickedMesh.name,
+          name: meshName,
           position: pickResult.pickedMesh.position,
         });
       }

@@ -7,6 +7,8 @@ class Program {
 
   public static selectionChanged(meshInfo: { id: string; name: string; position: BABYLON.Vector3 } | null) {
     if (meshInfo) {
+      console.log("Mesh info", meshInfo);
+      
       let roomTitle = document.getElementById("roomTitle");
       let roomContent = document.getElementById("roomContent");
       let roomPhotos = document.getElementById("thumbnails");
@@ -35,7 +37,6 @@ class Program {
 
             for (var i = 0; i < response.data.response.images.length; i++) {
               let url = response.data.response.images[i];
-              //onsole.log(url);
 
               roomPhotos.innerHTML += `
                 <article>
@@ -58,8 +59,6 @@ class Program {
             roomPhotos.innerHTML = "";
           }
         });
-
-      console.log("Mesh name: " + meshInfo.name);
       Program.openNav();
     } else {
       Program.closeNav();
@@ -72,17 +71,6 @@ class Program {
     this._mainScene.doRender();
 
     this._mainScene.onSelectionChanged = this.selectionChanged;
-  }
-
-  public static async doResize() {
-    let i = 1;
-    while (i <= 5) {
-      let timer = setInterval(() => {
-        this._mainScene.doResize();
-        clearInterval(timer);
-      }, 500 * i);
-      i++;
-    }
   }
 
   public static openNav() {
@@ -105,7 +93,6 @@ class Program {
 
     toggle.style.display = "block";
     body.classList.remove("fullscreen");
-    Program.doResize();
   }
 
   public static closeNav() {
@@ -128,7 +115,6 @@ class Program {
 
     toggle.style.display = "none";
     body.classList.add("fullscreen");
-    Program.doResize();
   }
 }
 
