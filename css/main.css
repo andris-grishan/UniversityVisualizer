@@ -874,7 +874,7 @@ input, select, textarea {
 			right: -2em;
 		}
 
-		@media screen and (max-width: 1280px) {
+		/* @media screen and (max-width: 1280px) {
 
 			#main {
 				width: 19em;
@@ -884,12 +884,12 @@ input, select, textarea {
 					right: -19em;
 				}
 
-		}
+		} */
 
-		@media screen and (max-width: 980px) {
+		@media screen {/*and (max-width: 980px) {*/
 
 			#main {
-				background: rgba(255, 255, 255, 0.925);
+				background: rgba(255, 255, 255, 0.85);
 			}
 
 				#main .toggle {
@@ -1188,15 +1188,15 @@ input, select, textarea {
 			opacity: 0;
 		}
 
-		@media screen and (max-width: 1280px) {
+		/* @media screen and (max-width: 1280px) {
 
 			#viewer {
 				width: calc(100% - 19em);
 			}
 
-		}
+		} */
 
-		@media screen and (max-width: 980px) {
+		@media screen {/*and (max-width: 1920px) {*/
 
 			#viewer {
 				width: 100%;
