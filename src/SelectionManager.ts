@@ -16,13 +16,25 @@ export class SelectionManager {
 
   private _selectedMesh: BABYLON.AbstractMesh | null;
 
+  private _pointerMoving = false;
+  private _pointerDown = false;
+
   constructor(scene: BABYLON.Scene) {
     this._scene = scene;
-
     this._selectedMesh = null;
 
+    this._scene.onPointerMove = (evt, pickResult) => {
+      this._pointerMoving = this._pointerDown;
+    };
+
     this._scene.onPointerDown = (evt, pickResult) => {
+      this._pointerDown = true;
+    };
+
+    this._scene.onPointerUp = (evt, pickResult) => {
       if (
+        !this._pointerMoving &&
+        pickResult &&
         pickResult.hit &&
         pickResult.pickedMesh &&
         this._onSelectionChanged &&
@@ -35,6 +47,8 @@ export class SelectionManager {
           position: pickResult.pickedMesh.position,
         });
       }
+
+      this._pointerDown = false;
     };
   }
 
