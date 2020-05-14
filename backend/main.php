@@ -8,6 +8,7 @@ include_once("config.php");
 global $_db, $_router, $_path, $_viewData, $_errors, $_pageBody, $_data;
 
 $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
+
 if (strcasecmp($contentType, 'application/json') != 0) {
     $_data = array();
 
