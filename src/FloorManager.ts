@@ -40,11 +40,16 @@ export class FloorManager {
     let floorName = this.getFloorName(floorIndex);
     for (let i = 0; i < this._meshesForAnimation.length; i++) {
       if (this._meshesForAnimation[i].mesh.parent?.name == floorName && !this._meshesForAnimation[i].mesh.isVisible) {
+        this._meshesForAnimation[i].mesh.unfreezeWorldMatrix();
+        this._meshesForAnimation[i].mesh.doNotSyncBoundingInfo = false;
+
         this._meshesForAnimation[i].mesh.isVisible = true;
-        let initialPosition = this._meshesForAnimation[i].positionY;
-        
+        let initialPosition = this._meshesForAnimation[i].positionY;        
         this.animateMesh(this._meshesForAnimation[i].mesh, -200, () => {
           this._meshesForAnimation[i].mesh.position.y = initialPosition;
+
+          this._meshesForAnimation[i].mesh.doNotSyncBoundingInfo = true;
+          this._meshesForAnimation[i].mesh.freezeWorldMatrix();
         });
       }
     }
@@ -54,11 +59,16 @@ export class FloorManager {
     let floorName = this.getFloorName(floorIndex);
     for (let i = 0; i < this._meshesForAnimation.length; i++) {
       if (this._meshesForAnimation[i].mesh.parent?.name == floorName && this._meshesForAnimation[i].mesh.isVisible) {
-        let initialPosition = this._meshesForAnimation[i].positionY;
+        this._meshesForAnimation[i].mesh.unfreezeWorldMatrix();
+        this._meshesForAnimation[i].mesh.doNotSyncBoundingInfo = false;
 
+        let initialPosition = this._meshesForAnimation[i].positionY;
         this.animateMesh(this._meshesForAnimation[i].mesh, 200, () => {
           this._meshesForAnimation[i].mesh.isVisible = false;
           this._meshesForAnimation[i].mesh.position.y = initialPosition;
+          
+          this._meshesForAnimation[i].mesh.doNotSyncBoundingInfo = true;
+          this._meshesForAnimation[i].mesh.freezeWorldMatrix();
         });
       }
     }

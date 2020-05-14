@@ -90,7 +90,24 @@ export class MainScene {
       container.addAllToScene();
       this.addHighlights();
       this.changeFloor();
+      this.optimizeScene();
     });
+  }
+
+  optimizeScene() {
+    //this._scene.debugLayer.show();
+
+    for (let i = 0; i < this._scene.materials.length; i++) {
+      this._scene.materials[i].freeze();
+    }
+    for (let i = 0; i < this._scene.meshes.length; i++) {
+      let mesh = this._scene.meshes[i] as BABYLON.Mesh;
+      if (mesh) {
+        mesh.convertToUnIndexedMesh();
+      }
+    }
+
+    BABYLON.SceneOptimizer.OptimizeAsync(this._scene);
   }
 
   changeFloor(floorIndex?: number) {
@@ -101,7 +118,7 @@ export class MainScene {
     }
   }
 
-  clearSelection(){
+  clearSelection() {
     this._selectionManager.clearSelection();
   }
 
