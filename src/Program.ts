@@ -27,9 +27,9 @@ class Program {
           if (roomContent != null) {
             roomContent.innerHTML = response.data.response.content;
 
-            if (roomContent.innerHTML == "") {
-              roomContent.innerHTML = "NO DATA!";
-            }
+            // if (roomContent.innerHTML == "") {
+            //   roomContent.innerHTML = "NO DATA!";
+            // }
           }
 
           if (roomPhotos != null) {
