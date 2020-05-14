@@ -111,3 +111,7 @@ dist
 
 # build folder
 dist/
+
+#PHP API
+database
+files
