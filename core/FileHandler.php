@@ -25,7 +25,7 @@ class FileHandler {
 
         $fileExt == "jpeg" ? "jpg" : $fileExt;
 
-        $name = $fileName . "." . $fileExt;
+        $name = preg_replace('/\s+/', '-', $fileName) . "." . $fileExt;
         $num = 0;
 
         while (file_exists($_filePath . "/" . $name)) {

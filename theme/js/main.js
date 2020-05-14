@@ -15,6 +15,7 @@ $(document).ready(function() {
         ".images-upload-wrapper",
         {
             url: "/admin/uploadfile",
+            maxFilesize: 5,
             addRemoveLinks: true,
             acceptedFiles: "image/*",
             dictRemoveFile: "Remove",
@@ -210,7 +211,7 @@ function clearModalData(modal, myDropzone) {
 
 function appendImagesToFormData(formData) {
     var imagesArr = [];
-    $.each($(".images-upload-wrapper .dz-complete .dz-filename span"), function() {
+    $.each($(".images-upload-wrapper .dz-complete:not(.dz-error) .dz-filename span"), function() {
         imagesArr.push(this.innerHTML);
     });
 
