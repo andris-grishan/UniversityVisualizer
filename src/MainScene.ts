@@ -27,6 +27,7 @@ export class MainScene {
   constructor(canvasElement: string) {
     this._canvas = document.getElementById(canvasElement) as HTMLCanvasElement;
     this._engine = new BABYLON.Engine(this._canvas, true, { stencil: true });
+    this._engine.renderEvenInBackground = false;
   }
 
   createScene(): void {
@@ -104,8 +105,11 @@ export class MainScene {
       let mesh = this._scene.meshes[i] as BABYLON.Mesh;
       if (mesh) {
         mesh.convertToUnIndexedMesh();
+        mesh.cullingStrategy = BABYLON.AbstractMesh.CULLINGSTRATEGY_OPTIMISTIC_INCLUSION_THEN_BSPHERE_ONLY;
       }
     }
+
+    this._scene.freezeActiveMeshes();
 
     BABYLON.SceneOptimizer.OptimizeAsync(this._scene);
   }
