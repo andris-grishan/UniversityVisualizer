@@ -47,8 +47,8 @@ export class MainScene {
     this._camera.attachControl(this._canvas, true);
     this._camera.maxZ = 100000;
 
-    this._camera.upperBetaLimit = Math.PI / 4;
-    this._camera.lowerBetaLimit = Math.PI / 4;
+    this._camera.upperBetaLimit = Math.PI / 2.2;
+    this._camera.lowerBetaLimit = Math.PI / 6;
 
     this._light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), this._scene);
 
@@ -64,7 +64,7 @@ export class MainScene {
     let skyboxMaterial = new BABYLON.StandardMaterial("skyBox", this._scene);
     skyboxMaterial.backFaceCulling = false;
     skyboxMaterial.disableLighting = true;
-    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("skybox/TropicalSunnyDay", this._scene);
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("assets/skybox/TropicalSunnyDay", this._scene);
     skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
     skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
     skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
