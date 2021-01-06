@@ -10,7 +10,7 @@
     "serve": "lite-server"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babylonjs": "^4.1.0",
     "babylonjs-gui": "^4.1.0",
     "babylonjs-materials": "^4.1.0",
